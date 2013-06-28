@@ -18,10 +18,5 @@
       </ul>
 
       <hr>
-
-      <footer>
-        <p>© Company 2013</p>
-      </footer>
-
     </div>
 <%@ include file="footer.jsp"%>

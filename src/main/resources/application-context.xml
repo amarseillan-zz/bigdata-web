@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:util="http://www.springframework.org/schema/util"
+	xmlns="http://www.springframework.org/schema/beans"
+	xsi:schemaLocation="
+         http://www.springframework.org/schema/beans
+         http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+         http://www.springframework.org/schema/context
+         http://www.springframework.org/schema/context/spring-context-3.0.xsd
+         http://www.springframework.org/schema/util
+         http://www.springframework.org/schema/util/spring-util-3.0.xsd
+         http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd">
+
+
+	<bean id="metricController" class="bigdata.web.controller.MetricController">
+		<property name="metricService" ref="metricService" />
+	</bean>
+
+	<bean id="metricService" class="bigdata.service.impl.MetricServiceImpl" />
+
+	<bean id="mysql.dao" class="bigdata.db.MySqlMetricDAO"
+		factory-method="getInstance">
+		<property name="connectionString" value="${connectionString}"/>
+		<property name="user" value="${username}"/>
+		<property name="password" value="${password}"/>
+		
+		
+	</bean>
+</beans>

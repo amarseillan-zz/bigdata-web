@@ -11,9 +11,11 @@
       <!-- Example row of columns -->
       <ul>
       	<c:forEach var="real" items="${rts}">
-      		Key: ${rts.metricKey}<br/>
-      		Minute: ${rts.minute}<br/>
-      		Quantity: ${rts.quantity}<br/>
+      	<li>
+      		Key: ${real.metricKey},
+      		Minute: ${real.minute},
+      		Quantity: ${real.quantity}
+      		</li>
       	</c:forEach>
       </ul>
 

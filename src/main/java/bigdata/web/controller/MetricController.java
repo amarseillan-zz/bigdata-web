@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import bigdata.model.RealTimeResult;
@@ -19,7 +20,7 @@ public class MetricController {
 	
 	@RequestMapping(value = "/{metricType}/{metricID}", method = RequestMethod.GET)
 	protected ModelAndView getMetric() {
-		ModelAndView mav = new ModelAndView("index");
+		ModelAndView mav = new ModelAndView("test");
 		
 		return mav;
 	}
@@ -31,12 +32,10 @@ public class MetricController {
 	}
 	
 	@RequestMapping(value = "/test/{metric_type}/{minute}", method = RequestMethod.GET)
-	protected ModelAndView getTest(@PathVariable String metric_type, @PathVariable String minute){
-		ModelAndView mav = new ModelAndView("test");
+	protected @ResponseBody List<RealTimeResult> getTest(@PathVariable String metric_type, @PathVariable String minute){
 		
 		List<RealTimeResult> rts = this.metricService.getRealTimeMetrics(metric_type, minute);
-		mav.addObject("rts", rts);
-		return mav;
+		return rts;
 	}
 
 	public void setMetricService(MetricService metricService) {

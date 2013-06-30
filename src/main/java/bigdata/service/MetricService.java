@@ -11,4 +11,5 @@ public interface MetricService {
 	
 	List<RealTimeResult> getRealTimeMetrics(String metricID, String minute);
 	
+	Long getTime();
 }

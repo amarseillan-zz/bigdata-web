@@ -38,7 +38,12 @@ public class MetricController {
 		List<RealTimeResult> rts = this.metricService.getRealTimeMetrics(metric_type, minute);
 		return rts;
 	}
-
+	
+	@RequestMapping(value = "/utils/time")
+	protected @ResponseBody Long getTime(){
+		return this.metricService.getTime();
+	}
+	
 	public void setMetricService(MetricService metricService) {
 		this.metricService = metricService;
 	}

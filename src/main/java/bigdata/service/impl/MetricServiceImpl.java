@@ -31,5 +31,11 @@ public class MetricServiceImpl implements MetricService{
 		List<RealTimeResult> realTimeResults = metricDAO.getMetrics(metricID, minute);
 		return realTimeResults;
 	}
+	
+	@Override
+	public Long getTime() {
+		MySqlMetricDAO metricDAO = MySqlMetricDAO.getInstance();
+		return metricDAO.getTime();
+	}
 
 }

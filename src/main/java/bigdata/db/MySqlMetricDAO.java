@@ -30,8 +30,9 @@ public class MySqlMetricDAO {
 	}
 
 	public List<RealTimeResult> getMetrics(String metricID, String minute) {
+		Connection connection = null;
 		try {
-			Connection connection = this.connect();
+			connection = this.connect();
 			Statement statement = connection.createStatement();
 			ResultSet rs = statement.executeQuery("SELECT * FROM " + metricID
 					+ " WHERE MINUTE = '" + minute + "';");
@@ -43,12 +44,27 @@ public class MySqlMetricDAO {
 				realTimeResults.add(new RealTimeResult(rs
 						.getString("metric_key"), point));
 			}
+			connection.close();
 			return realTimeResults;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return null;
 
+	}
+	
+	public Long getTime(){
+		try {
+			Connection connection = this.connect();
+			Statement statement = connection.createStatement();
+			ResultSet rs = statement.executeQuery("SELECT MINUTE FROM TotalViewers ORDER BY MINUTE ASC");
+			if (rs.next()) {
+				return Long.valueOf(rs.getString("minute"));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	private Connection connect() throws SQLException, ClassNotFoundException {
@@ -61,17 +77,14 @@ public class MySqlMetricDAO {
 	}
 
 	public void setConnectionString(String connectionString) {
-		System.out.println("asd");
 		this.connectionString = connectionString;
 	}
 
 	public void setUser(String user) {
-		System.out.println(user);
 		this.user = user;
 	}
 
 	public void setPassword(String password) {
-		System.out.println("asd");
 		this.password = password;
 	}
 }

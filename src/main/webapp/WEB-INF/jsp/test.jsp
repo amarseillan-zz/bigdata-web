@@ -1,44 +1,84 @@
 <%@ include file="header.jsp"%>
 <script src="http://code.highcharts.com/highcharts.js"></script>
 <script src="http://code.highcharts.com/modules/exporting.js"></script>
-<script>$(function () {
-    $('#graph').highcharts({
+<script>
+var chart;
+var count = 0;
+$(document).ready(function() {
+
+    chart = new Highcharts.Chart({
         chart: {
-            type: 'spline'
+            renderTo: 'graph',
+            type: 'line',
+            marginRight: 130,
+            marginBottom: 25, 
+            events: {
+                load: function() {
+                    setInterval(addData, 1000);
+                }
+            }
         },
         title: {
-            text: 'Snow depth in the Vikjafjellet mountain, Norway'
-        },
-        subtitle: {
-            text: 'An example of irregular time data in Highcharts JS'
+            text: 'Total Viewers',
+            x: -20 //center
         },
         xAxis: {
-            type: 'datetime',
-            dateTimeLabelFormats: { // don't display the dummy year
-                month: '%e. %b',
-                year: '%b'
-            }
+            categories: [1,2,3,4,5]
         },
         yAxis: {
             title: {
-                text: 'Snow depth (m)'
+                text: 'totalViewers'
             },
-            min: 0
+            plotLines: [{
+                value: 0,
+                width: 1,
+                color: '#808080'
+            }]
         },
-        tooltip: {
-            formatter: function() {
-                    return '<b>'+ this.series.name +'</b><br/>'+
-                    Highcharts.dateFormat('%e. %b', this.x) +': '+ this.y +' m';
-            }
+        legend: {
+            layout: 'vertical',
+            align: 'right',
+            verticalAlign: 'top',
+            x: -10,
+            y: 100,
+            borderWidth: 0
+        }
+    });
+    $.ajax({
+        url: '/bigdata/bin/metrics/test/TotalViewers/22746240',
+        type: "GET",
+        dataType: "json",
+        success: function(data) {
+        	var length = data.length, element = null;
+        	for (var i = 0; i < length; i++) {
+          		element = data[i];
+	            chart.addSeries({
+	              name: element.metricKey,
+	              data: [element.point]
+	            });
+       		}
         },
-        
-        series: [      	<c:forEach var="real" items="${rts}" varStatus="loop">
-  		{ name: '${real.metricKey}', data:[[${real.minute}, ${real.quantity}],[${real.minute}+1, ${real.quantity}+20],[${real.minute}+2, ${real.quantity}+10]]}
-  		<c:if test="${!loop.last}">,</c:if>
-  	</c:forEach>]
+        cache: false
     });
 });
 
+
+
+function addData() {
+	count++;
+    $.ajax({
+        url: '/bigdata/bin/metrics/test/TotalViewers/' + (22746240 + count),
+        type: "GET",
+        dataType: "json",
+        success: function(data) {
+        	var length = data.length;
+        	for (var i = 0; i < length; i++) {
+	        	chart.series[i].addPoint(data[i].point, true, count > 10);
+       		}
+        },
+        cache: false
+    });
+}
 </script>
 <div class="container">
 

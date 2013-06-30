@@ -37,9 +37,11 @@ public class MySqlMetricDAO {
 					+ " WHERE MINUTE = '" + minute + "';");
 			List<RealTimeResult> realTimeResults = new ArrayList<RealTimeResult>();
 			while (rs.next()) {
+				List<Double> point = new ArrayList<Double>(2);
+				point.add(Double.valueOf(rs.getString("minute")));
+				point.add(Double.valueOf(rs.getString("quantity")));
 				realTimeResults.add(new RealTimeResult(rs
-						.getString("metric_key"), rs.getString("minute"), rs
-						.getString("quantity")));
+						.getString("metric_key"), point));
 			}
 			return realTimeResults;
 		} catch (Exception e) {

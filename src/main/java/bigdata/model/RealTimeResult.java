@@ -1,37 +1,32 @@
 package bigdata.model;
 
+import java.util.List;
+
 public class RealTimeResult {
+
 	private String metricKey;
-	private String minute;
-	private String quantity;
-	
-	public RealTimeResult( String metricKey, String minute, String quantity) {
+	private List<Double> point;
+
+	public RealTimeResult(String metricKey, List<Double> point) {
+		super();
 		this.metricKey = metricKey;
-		this.minute = minute;
-		this.quantity = quantity;
+		this.point = point;
 	}
 
 	public String getMetricKey() {
 		return metricKey;
 	}
 
-	public String getMinute() {
-		return minute;
-	}
-
-	public String getQuantity() {
-		return quantity;
+	public List<Double> getPoint() {
+		return this.point;
 	}
 
 	public void setMetricKey(String metricKey) {
 		this.metricKey = metricKey;
 	}
 
-	public void setMinute(String minute) {
-		this.minute = minute;
+	public void setX(List<Double> point) {
+		this.point = point;
 	}
 
-	public void setQuantity(String quantity) {
-		this.quantity = quantity;
-	}
 }

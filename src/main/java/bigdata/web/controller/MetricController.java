@@ -65,6 +65,12 @@ public class MetricController {
 		return (new Gson()).toJson(this.metricService.getAudiencePerFamilyGroup());
 	}
 	
+	@RequestMapping(value = "/batch/worstshows", method = RequestMethod.GET)
+	protected @ResponseBody String getWorstShows(){
+		
+		return (new Gson()).toJson(this.metricService.getWorstShows());
+	}
+	
 
 	public void setMetricService(MetricService metricService) {
 		this.metricService = metricService;

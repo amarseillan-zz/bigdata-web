@@ -29,6 +29,12 @@ public class MetricServiceImpl implements MetricService{
 		MySqlMetricDAO metricDAO = MySqlMetricDAO.getInstance();
 		return metricDAO.getTop10Categories();
 	}
+	
+	@Override
+	public BarChart getWorstShows() {
+		MySqlMetricDAO metricDAO = MySqlMetricDAO.getInstance();
+		return metricDAO.getWorstShows();
+	}
 
 	@Override
 	public RealTimeChart getAvgDurationChannel() {

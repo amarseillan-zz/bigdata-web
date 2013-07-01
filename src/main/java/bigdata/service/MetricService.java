@@ -14,6 +14,8 @@ public interface MetricService {
 	
 	BarChart getTopChannelAds();
 	
+	BarChart getWorstShows();
+	
 	RealTimeChart getAvgDurationChannel();
 	
 	RealTimeChart getAvgDurationCategory();

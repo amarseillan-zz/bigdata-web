@@ -43,6 +43,9 @@ $(document).ready(function(){
 	$('#audienceperfg').click(function() {
 		loadPieChart("Audience Per Family Group", "audienceperfg");
 		});
+	$('#worstshows').click(function() {
+		loadBarChart("Worst Shows", "worstshows", "People that Changed Channel");
+		});
 });
 </script>
 </head>

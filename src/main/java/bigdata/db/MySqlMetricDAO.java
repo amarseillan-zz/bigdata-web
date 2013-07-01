@@ -165,6 +165,10 @@ public class MySqlMetricDAO {
 		return getBarChartChannels("top10categories");
 	}
 	
+	public BarChart getWorstShows() {
+		return getBarChartChannels("worst_shows");
+	}
+	
 	public BarChart getTopChannelAds() {
 		return getBarChartChannelsForAds("ads_per_channel");
 	}

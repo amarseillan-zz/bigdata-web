@@ -1,6 +1,13 @@
 var realTimeSeries = null;
+
+function getInterval(){
+	if( $("#interval").val() == undefined || $("#interval").val() == 0 ){
+		return 2000;
+	}
+	return $("#interval").val() * 1000;
+}
 var loadLineChart = function(path, metricName) {
-	$("#container").html("<img src='/bigdata/img/loading.gif'/>");
+	$("#container").html("<img src='../img/loading.gif'/>");
 	$.ajax({
 			dataType: "json",
 			type: "GET",
@@ -21,7 +28,7 @@ var loadLineChart = function(path, metricName) {
 		                events: {
 		                    load: function() {
 		                    	var that = this;
-		                        setInterval(function() {addData(that);}, 1000);
+		                        setInterval(function() {addData(that);}, getInterval());
 		                    }
 		                }
 		            },
@@ -56,7 +63,7 @@ var loadLineChart = function(path, metricName) {
 };
 
 var privateLoadBatchLineChart = function(path, metricName) {
-	$("#container").html("<img src='/bigdata/img/loading.gif'/>");
+	$("#container").html("<img src='../img/loading.gif'/>");
 	$.ajax({
 	      dataType: "json",
 	      type: "GET",
@@ -111,7 +118,7 @@ function addData(chart) {
 }
 
 var loadBarChart = function(title, metricName, yaxis) {
-	$("#container").html("<img src='/bigdata/img/loading.gif'/>");
+	$("#container").html("<img src='../img/loading.gif'/>");
 	$.ajax({
 			dataType: "json",
 			type: "GET",
@@ -151,7 +158,7 @@ var loadBarChart = function(title, metricName, yaxis) {
 };
 
 var loadPieChart = function(title, metricName) {
-	$("#container").html("<img src='/bigdata/img/loading.gif'/>");
+	$("#container").html("<img src='../img/loading.gif'/>");
 	$.ajax({
 			dataType: "json",
 			type: "GET",

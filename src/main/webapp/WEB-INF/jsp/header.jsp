@@ -10,13 +10,13 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<link rel="stylesheet" type="text/css" href="/bigdata/css/bootstrap.css" />
-<link rel="stylesheet" type="text/css" href="/bigdata/css/chosen.css" />
+<link rel="stylesheet" type="text/css" href="../css/bootstrap.css" />
+<link rel="stylesheet" type="text/css" href="../css/chosen.css" />
 <script type="text/javascript" src="http://code.jquery.com/jquery-latest.pack.js"></script>
-<script src="/bigdata/js/chosen.jquery.js"></script>
-<script src="/bigdata/js/bootstrap.js"></script>
-<script src="/bigdata/js/highcharts.js"></script>
-<script src="/bigdata/js/selectchart.js"></script>
+<script src="../js/chosen.jquery.js"></script>
+<script src="../js/bootstrap.js"></script>
+<script src="../js/highcharts.js"></script>
+<script src="../js/selectchart.js"></script>
 <script type="text/javascript">
 function destroy(){
 	$('#container').highcharts() == undefined ? 'undefined' : $('#container').highcharts().destroy();

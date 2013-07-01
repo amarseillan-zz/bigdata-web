@@ -4,8 +4,7 @@
       <!-- Main hero unit for a primary marketing message or call to action -->
       <div class="hero-unit">
         <h1>Bigdata visualization</h1>
-        <p>This is a Pink elephant TV statistics viewer, feel free to send us your <a href="contact/">recommendations </a>!</p>
-        <p><a href="#" class="btn btn-primary btn-large">Learn more »</a></p>
+        <p>This is a Pink elephant TV statistics viewer, feel free to send us your <a href="mailto:agustinmarseillan@gmail.com">recommendations </a>!</p>
       </div>
 
       <!-- Example row of columns -->
@@ -56,7 +55,7 @@
       </div>
       
       <div id="container" style="width:100%; height:400px;"></div>
-
+	  <input type="hidden" id="interval" value="${interval}"/>
       <hr>
 
       <footer>

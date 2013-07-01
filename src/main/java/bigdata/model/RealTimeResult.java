@@ -4,29 +4,16 @@ import java.util.List;
 
 public class RealTimeResult {
 
-	private String metricKey;
-	private List<Double> point;
+	private String name;
+	private List<List<Long>> data;
 
-	public RealTimeResult(String metricKey, List<Double> point) {
-		super();
-		this.metricKey = metricKey;
-		this.point = point;
+	public RealTimeResult(String metricKey, List<List<Long>> counts) {
+		this.name = metricKey;
+		this.data = counts;
 	}
 
 	public String getMetricKey() {
-		return metricKey;
-	}
-
-	public List<Double> getPoint() {
-		return this.point;
-	}
-
-	public void setMetricKey(String metricKey) {
-		this.metricKey = metricKey;
-	}
-
-	public void setX(List<Double> point) {
-		this.point = point;
+		return name;
 	}
 
 }

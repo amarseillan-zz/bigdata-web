@@ -1,14 +1,25 @@
 package bigdata.service;
 
-import java.util.List;
-
-import bigdata.model.BatchResult;
-import bigdata.model.RealTimeResult;
+import bigdata.model.BarChart;
+import bigdata.model.PieChart;
+import bigdata.model.RealTimeChart;
 
 public interface MetricService {
 
-	List<BatchResult> getBatchMetrics(String metricID);
+	RealTimeChart getRealTimeMetrics(String metricID);
 	
-	List<RealTimeResult> getRealTimeMetrics(String metricID, String minute);
+	BarChart getTop10Channels();
+	
+	BarChart getTop10Categories();
+	
+	BarChart getTopChannelAds();
+	
+	RealTimeChart getAvgDurationChannel();
+	
+	RealTimeChart getAvgDurationCategory();
+	
+	PieChart getAudiencePerType();
+	
+	PieChart getAudiencePerFamilyGroup();
 	
 }

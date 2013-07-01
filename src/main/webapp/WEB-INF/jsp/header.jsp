@@ -15,9 +15,34 @@
 <script type="text/javascript" src="http://code.jquery.com/jquery-latest.pack.js"></script>
 <script src="/bigdata/js/chosen.jquery.js"></script>
 <script src="/bigdata/js/bootstrap.js"></script>
+<script src="/bigdata/js/highcharts.js"></script>
+<script src="/bigdata/js/selectchart.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
-	$("select").chosen();
+	$('#realtimemetrics').change(function() {
+		loadRealtimeChart($('#realtimemetrics').val());
+		});
+	$('#avgdurationcategory').click(function() {
+		loadBatchLineChart("avgdurationcategories");
+		});
+	$('#avgdurationchannel').click(function() {
+		loadBatchLineChart("avgdurationchannels");
+		});
+	$('#top10channels').click(function() {
+		loadBarChart("Top 10 Channels", "top10channels", "Viewers");
+		});
+	$('#top10categories').click(function() {
+		loadBarChart("Top 10 Categories", "top10categories", "Viewers");
+		});
+	$('#topchannelads').click(function() {
+		loadBarChart("Channels With Most Ads", "topchannelads", "Ads");
+		});
+	$('#audiencepertype').click(function() {
+		loadPieChart("Audience Per Type", "audiencepertype");
+		});
+	$('#audienceperfg').click(function() {
+		loadPieChart("Audience Per Family Group", "audienceperfg");
+		});
 });
 </script>
 </head>

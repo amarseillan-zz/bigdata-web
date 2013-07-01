@@ -55,8 +55,51 @@ var loadLineChart = function(path, metricName) {
 		});;
 };
 
+var privateLoadBatchLineChart = function(path, metricName) {
+	$("#container").html("<img src='/bigdata/img/loading.gif'/>");
+	$.ajax({
+	      dataType: "json",
+	      type: "GET",
+	      url: "metrics/" + path + "/" + metricName,
+	      
+	    }).done(function( data ) {
+	      $(function () {
+	            $('#container').highcharts({
+	                chart: {
+	                    type: 'line'
+	                },
+	                title: {
+	                    text: data.title
+	                },
+	                xAxis: {
+	                    type: 'datetime',
+	                    dateTimeLabelFormats: { // don't display the dummy year
+	                        month: '%e. %b',
+	                        year: '%b'
+	                    }
+	                },
+	                yAxis: {
+	                    title: {
+	                        text: 'Count'
+	                    },
+	                    min: 0
+	                },
+	                tooltip: {
+	                    formatter: function() {
+	                            return '<b>'+ this.series.name +'</b><br/>'+
+	                            Highcharts.dateFormat('%e. %b', this.x) +': '+ this.y +' m';
+	                    }
+	                },
+	                
+	                series: data.series,
+	                
+	            });
+	        });
+	    });;
+};
+
 function addData(chart) {
-	if (typeof chart.series == 'undefined'){
+	if (typeof chart.series == 'undefined' || typeof chart.series[0].data == 'undefined' || typeof chart.series[0].data[0] == 'undefined'){
 		return
 	}
 	var time = realTimeSeries.series[0].data[0];
@@ -155,5 +198,5 @@ var loadRealtimeChart = function(metricName) {
 };
 
 var loadBatchLineChart = function(metricName) {
-	loadLineChart("batch", metricName);
+	privateLoadBatchLineChart("batch", metricName);
 };

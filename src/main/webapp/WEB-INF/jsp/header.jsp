@@ -18,32 +18,44 @@
 <script src="/bigdata/js/highcharts.js"></script>
 <script src="/bigdata/js/selectchart.js"></script>
 <script type="text/javascript">
+function destroy(){
+	$('#container').highcharts() == undefined ? 'undefined' : $('#container').highcharts().destroy();
+}
 $(document).ready(function(){
 	$('#realtimemetrics').change(function() {
+		destroy();
 		loadRealtimeChart($('#realtimemetrics').val());
 		});
 	$('#avgdurationcategory').click(function() {
+		destroy();
 		loadBatchLineChart("avgdurationcategories");
 		});
 	$('#avgdurationchannel').click(function() {
+		destroy();
 		loadBatchLineChart("avgdurationchannels");
 		});
 	$('#top10channels').click(function() {
+		destroy();
 		loadBarChart("Top 10 Channels", "top10channels", "Viewers");
 		});
 	$('#top10categories').click(function() {
+		destroy();
 		loadBarChart("Top 10 Categories", "top10categories", "Viewers");
 		});
 	$('#topchannelads').click(function() {
+		destroy();
 		loadBarChart("Channels With Most Ads", "topchannelads", "Ads");
 		});
 	$('#audiencepertype').click(function() {
+		destroy();
 		loadPieChart("Audience Per Type", "audiencepertype");
 		});
 	$('#audienceperfg').click(function() {
+		destroy();
 		loadPieChart("Audience Per Family Group", "audienceperfg");
 		});
 	$('#worstshows').click(function() {
+		destroy();
 		loadBarChart("Worst Shows", "worstshows", "People that Changed Channel");
 		});
 });

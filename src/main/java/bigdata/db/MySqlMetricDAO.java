@@ -2,33 +2,24 @@ package bigdata.db;
 
 import java.sql.Connection;
 import java.sql.Date;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import bigdata.model.BarChart;
 import bigdata.model.PieChart;
 import bigdata.model.RealTimeChart;
 import bigdata.model.RealTimeChartBuilder;
 
+@Component
 public class MySqlMetricDAO {
+	
+	@Autowired
+	private ConnectionPool connectionPool;
 
-	static private MySqlMetricDAO instance;
-
-	private String connectionString;
-	private String user;
-
-	private String password;
-
-	synchronized static public MySqlMetricDAO getInstance() {
-		if (instance == null) {
-			instance = new MySqlMetricDAO();
-		}
-		return instance;
-	}
-
-	private MySqlMetricDAO() {
+	MySqlMetricDAO() {
 	}
 
 
@@ -36,7 +27,7 @@ public class MySqlMetricDAO {
 		RealTimeChartBuilder builder = new RealTimeChartBuilder();
 		Connection connection = null;
 		try {
-			connection = this.connect();
+			connection = this.connectionPool.getConnection();
 			Statement statement = connection.createStatement();
 			ResultSet rs = statement.executeQuery("SELECT * FROM " + metricID
 					 + ";");
@@ -47,11 +38,7 @@ public class MySqlMetricDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			try {
-				connection.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+			this.connectionPool.releaseConnection(connection);
 		}
 		builder.setTitle(metricID);
 		return builder.prepareChartWithLimit(10);
@@ -59,8 +46,9 @@ public class MySqlMetricDAO {
 	}
 	
 	public Long getTime(){
+		Connection connection = null;
 		try {
-			Connection connection = this.connect();
+			connection = this.connectionPool.getConnection();
 			Statement statement = connection.createStatement();
 			ResultSet rs = statement.executeQuery("SELECT MINUTE FROM TotalViewers ORDER BY MINUTE ASC");
 			if (rs.next()) {
@@ -68,6 +56,8 @@ public class MySqlMetricDAO {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+		}finally {
+			this.connectionPool.releaseConnection(connection);
 		}
 		return null;
 	}
@@ -76,7 +66,7 @@ public class MySqlMetricDAO {
 		RealTimeChartBuilder builder = new RealTimeChartBuilder();
 		Connection connection = null;
 		try {
-			connection = this.connect();
+			connection = this.connectionPool.getConnection();
 			Statement statement = connection.createStatement();
 			ResultSet rs = statement.executeQuery("SELECT * FROM " + metric
 					 + ";");
@@ -90,11 +80,7 @@ public class MySqlMetricDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			try {
-				connection.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+			this.connectionPool.releaseConnection(connection);
 		}
 		builder.setTitle(metric);
 		return builder.prepareChartWithLimit(10);
@@ -104,7 +90,7 @@ public class MySqlMetricDAO {
 		BarChart chart = new BarChart();
 		Connection connection = null;
 		try {
-			connection = this.connect();
+			connection = this.connectionPool.getConnection();
 			Statement statement = connection.createStatement();
 			ResultSet rs = statement.executeQuery("SELECT * FROM " + tableName
 					 + " order by hits desc;");
@@ -115,11 +101,7 @@ public class MySqlMetricDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			try {
-				connection.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+			this.connectionPool.releaseConnection(connection);
 		}
 		return chart;
 	}
@@ -128,7 +110,7 @@ public class MySqlMetricDAO {
 		BarChart chart = new BarChart();
 		Connection connection = null;
 		try {
-			connection = this.connect();
+			connection = this.connectionPool.getConnection();
 			Statement statement = connection.createStatement();
 			ResultSet rs = statement.executeQuery("SELECT * FROM " + tableName
 					 + " order by hits desc;");
@@ -138,12 +120,8 @@ public class MySqlMetricDAO {
 			
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			try {
-				connection.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+		}finally {
+			this.connectionPool.releaseConnection(connection);
 		}
 		return chart;
 	}
@@ -152,7 +130,7 @@ public class MySqlMetricDAO {
 		PieChart chart = new PieChart();
 		Connection connection = null;
 		try {
-			connection = this.connect();
+			connection = this.connectionPool.getConnection();
 			Statement statement = connection.createStatement();
 			ResultSet rs = statement.executeQuery("SELECT * FROM " + tableName
 					 + ";");
@@ -162,12 +140,8 @@ public class MySqlMetricDAO {
 			
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			try {
-				connection.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+		}finally {
+			this.connectionPool.releaseConnection(connection);
 		}
 		return chart;
 	}
@@ -205,25 +179,7 @@ public class MySqlMetricDAO {
 		return getPieChartChannels("audience_per_fg");
 	}
 	
-
-	private Connection connect() throws SQLException, ClassNotFoundException {
-		Class.forName("com.mysql.jdbc.Driver");
-		Connection conn = null;
-
-		conn = DriverManager.getConnection(connectionString, user, password);
-
-		return conn;
-	}
-
-	public void setConnectionString(String connectionString) {
-		this.connectionString = connectionString;
-	}
-
-	public void setUser(String user) {
-		this.user = user;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
+	public void setConnectionPool(ConnectionPool connectionPool) {
+		this.connectionPool = connectionPool;
 	}
 }

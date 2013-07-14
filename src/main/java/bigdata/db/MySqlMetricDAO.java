@@ -41,7 +41,6 @@ public class MySqlMetricDAO {
 			rs = statement.executeQuery("SELECT * FROM " + metricID
 					+ " WHERE MINUTE >= " + minute / 60000
 					+ " ORDER BY MINUTE ASC LIMIT "+ count * 10 + ";");
-			System.out.println("Getting data for minute >=" + minute / 60000);
 			while (rs.next()) {
 				builder.addValue(rs.getString("metric_key"),
 						rs.getLong("minute") * 60000, rs.getInt("quantity"));

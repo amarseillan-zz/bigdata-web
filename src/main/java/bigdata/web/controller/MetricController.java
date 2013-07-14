@@ -1,5 +1,6 @@
 package bigdata.web.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,6 +16,7 @@ import com.google.gson.Gson;
 @RequestMapping("/metrics")
 public class MetricController {
 
+	@Autowired
 	private MetricService metricService;
 	
 	@RequestMapping(value = "/rt/{metric_type}", method = RequestMethod.GET)

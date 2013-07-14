@@ -12,6 +12,8 @@
          http://www.springframework.org/schema/util/spring-util-3.0.xsd
          http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd">
 
+	<context:component-scan base-package="bigdata"></context:component-scan>
+
 	<bean id="properties" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="ignoreResourceNotFound" value="true" />
 		<property name="locations">
@@ -21,19 +23,4 @@
 		</property>
 	</bean>
 
-
-	<bean id="metricController" class="bigdata.web.controller.MetricController">
-		<property name="metricService" ref="metricService" />
-	</bean>
-
-	<bean id="metricService" class="bigdata.service.impl.MetricServiceImpl" />
-
-	<bean id="mysql.dao" class="bigdata.db.MySqlMetricDAO"
-		factory-method="getInstance">
-		<property name="connectionString" value="${connectionString}"/>
-		<property name="user" value="${username}"/>
-		<property name="password" value="${password}"/>
-		
-		
-	</bean>
 </beans>

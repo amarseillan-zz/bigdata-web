@@ -11,11 +11,11 @@ import bigdata.service.MetricService;
 public class MetricServiceImpl implements MetricService{
 
 	@Override
-	public RealTimeChart getRealTimeMetrics(String metricID) {
+	public RealTimeChart getRealTimeMetrics(String metricID, Long minute) {
 		Assert.notNull(metricID);
 		
 		MySqlMetricDAO metricDAO = MySqlMetricDAO.getInstance();
-		return metricDAO.getMetrics(metricID);
+		return metricDAO.getMetrics(metricID, minute);
 	}
 
 	@Override

@@ -6,7 +6,7 @@ import bigdata.model.RealTimeChart;
 
 public interface MetricService {
 
-	RealTimeChart getRealTimeMetrics(String metricID);
+	RealTimeChart getRealTimeMetrics(String metricID, Long minute);
 	
 	BarChart getTop10Channels();
 	

@@ -2,12 +2,14 @@ package bigdata.web;
 
 
 
+import org.apache.log4j.Logger;
 import org.mortbay.jetty.Connector;
 import org.mortbay.jetty.Server;
 import org.mortbay.jetty.bio.SocketConnector;
 import org.mortbay.jetty.webapp.WebAppContext;
 
 public class RunBigdata {
+	static private final Logger LOGGER = Logger.getLogger(bigdata.web.RunBigdata.class);
 	public static void main(String[] args) throws Exception {
 	
 		Server server = new Server();
@@ -22,7 +24,7 @@ public class RunBigdata {
 		bb.setWar("src/main/webapp");
 		server.addHandler(bb);
 		try {
-			System.out.println(">>> STARTING EMBEDDED JETTY SERVER, "
+			LOGGER.info(">>> STARTING EMBEDDED JETTY SERVER, "
 					+ "PRESS ANY KEY TO STOP");
 			server.start();
 			while (System.in.available() == 0) {

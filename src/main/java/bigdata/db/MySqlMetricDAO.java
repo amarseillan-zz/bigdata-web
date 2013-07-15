@@ -5,6 +5,7 @@ import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -18,6 +19,8 @@ public class MySqlMetricDAO {
 	
 	@Autowired
 	private ConnectionPool connectionPool;
+	
+	static private final Logger LOGGER = Logger.getLogger(bigdata.db.MySqlMetricDAO.class);
 
 	MySqlMetricDAO() {
 	}
@@ -38,7 +41,7 @@ public class MySqlMetricDAO {
 				//count = count > 10 ? 10 : count;
 			}
 			rs.close();
-			rs = statement.executeQuery("SELECT * FROM " + metricID
+			rs = statement.executeQuery("SELECT * FROM " + metricID	
 					+ " WHERE MINUTE >= " + minute / 60000
 					+ " ORDER BY MINUTE ASC LIMIT "+ count * 10 + ";");
 			while (rs.next()) {
@@ -47,7 +50,7 @@ public class MySqlMetricDAO {
 			}
 			rs.close();
 		} catch (Exception e) {
-			e.printStackTrace();
+			LOGGER.error("Connection error: ", e);
 		} finally {
 			this.connectionPool.releaseConnection(connection);
 		}
@@ -67,7 +70,7 @@ public class MySqlMetricDAO {
 				return Long.valueOf(rs.getLong("minute") * 60000);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			LOGGER.error("Connection error: ", e);
 		}finally {
 			this.connectionPool.releaseConnection(connection);
 		}
@@ -91,7 +94,7 @@ public class MySqlMetricDAO {
 			}
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			LOGGER.error("Connection error: ", e);
 		} finally {
 			this.connectionPool.releaseConnection(connection);
 		}
@@ -112,7 +115,7 @@ public class MySqlMetricDAO {
 			}
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			LOGGER.error("Connection error: ", e);
 		} finally {
 			this.connectionPool.releaseConnection(connection);
 		}
@@ -132,7 +135,7 @@ public class MySqlMetricDAO {
 			}
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			LOGGER.error("Connection error: ", e);
 		}finally {
 			this.connectionPool.releaseConnection(connection);
 		}
@@ -152,7 +155,7 @@ public class MySqlMetricDAO {
 			}
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			LOGGER.error("Connection error: ", e);
 		}finally {
 			this.connectionPool.releaseConnection(connection);
 		}

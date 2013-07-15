@@ -7,7 +7,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
 <meta http-equiv="content-type" content="text/html; charset=iso-8859-1" />
-<title>Olap</title>
+<title>Bigdata</title>
 </head>
 <body>
 <c:redirect url="/bin/index"/>

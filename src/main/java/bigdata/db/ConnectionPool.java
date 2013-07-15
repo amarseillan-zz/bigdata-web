@@ -7,6 +7,8 @@ import java.util.Properties;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -14,6 +16,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class ConnectionPool {
 
+	static private final Logger LOGGER = LogManager.getLogger(bigdata.db.ConnectionPool.class.getName());
+	
 	private BlockingQueue<Connection> bq;
 	
 	@Autowired
@@ -27,10 +31,10 @@ public class ConnectionPool {
 		} catch (ClassNotFoundException e) {
 			throw new IllegalStateException("Error initializen bd driver", e);
 		}
-		System.out.println("Creating connection pool...");
+		LOGGER.info("Creating connection pool...");
 		for (int i = 0; i < connectionSize; i++) {
 			try {
-				System.out.println("Creating connection: " + i + "/" + connectionSize);
+				LOGGER.info("Creating connection: " + i + "/" + connectionSize);
 				bq.put(makeConnection(connectionString, connectionProps));
 			} catch (Exception e) {
 				throw new IllegalStateException(

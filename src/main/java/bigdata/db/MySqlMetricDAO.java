@@ -5,6 +5,7 @@ import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -18,25 +19,38 @@ public class MySqlMetricDAO {
 	
 	@Autowired
 	private ConnectionPool connectionPool;
+	
+	static private final Logger LOGGER = Logger.getLogger(bigdata.db.MySqlMetricDAO.class);
 
 	MySqlMetricDAO() {
 	}
 
-
-	public RealTimeChart getMetrics(String metricID) {
+	public RealTimeChart getMetrics(String metricID, Long minute) {
+		if (minute == -1) {
+			minute = this.getLastHour(metricID);
+		}
 		RealTimeChartBuilder builder = new RealTimeChartBuilder();
 		Connection connection = null;
 		try {
+			//Long count = 1L;
 			connection = this.connectionPool.getConnection();
 			Statement statement = connection.createStatement();
-			ResultSet rs = statement.executeQuery("SELECT * FROM " + metricID
-					 + ";");
+			ResultSet rs; //= statement.executeQuery("SELECT COUNT(DISTINCT metric_key) as count FROM " + metricID + ";");
+			//if (rs.next()){
+				//count = rs.getLong("count");
+				//count = count > 10 ? 10 : count;
+			//}
+			//rs.close();
+			rs = statement.executeQuery("SELECT * FROM " + metricID	
+					+ " WHERE MINUTE >= " + minute / 60000
+					+ " ORDER BY MINUTE ASC;");
 			while (rs.next()) {
-				builder.addValue(rs.getString("metric_key"), rs.getLong("minute") * 60000, rs.getInt("quantity"));
+				builder.addValue(rs.getString("metric_key"),
+						rs.getLong("minute") * 60000, rs.getInt("quantity"));
 			}
-			
+			rs.close();
 		} catch (Exception e) {
-			e.printStackTrace();
+			LOGGER.error("Connection error: ", e);
 		} finally {
 			this.connectionPool.releaseConnection(connection);
 		}
@@ -45,21 +59,40 @@ public class MySqlMetricDAO {
 
 	}
 	
-	public Long getTime(){
+	public Long getTime(String metric){
 		Connection connection = null;
 		try {
 			connection = this.connectionPool.getConnection();
 			Statement statement = connection.createStatement();
-			ResultSet rs = statement.executeQuery("SELECT MINUTE FROM TotalViewers ORDER BY MINUTE ASC");
+			ResultSet rs = statement
+					.executeQuery("SELECT MIN(MINUTE) as minute FROM " + metric);
 			if (rs.next()) {
-				return Long.valueOf(rs.getString("minute"));
+				return Long.valueOf(rs.getLong("minute") * 60000);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			LOGGER.error("Connection error: ", e);
 		}finally {
 			this.connectionPool.releaseConnection(connection);
 		}
-		return null;
+		return 1L;
+	}
+
+	public Long getLastHour(String metric){
+		Connection connection = null;
+		try {
+			connection = this.connectionPool.getConnection();
+			Statement statement = connection.createStatement();
+			ResultSet rs = statement
+					.executeQuery("SELECT MAX(MINUTE) as minute FROM " + metric);
+			if (rs.next()) {
+				return Long.valueOf((rs.getLong("minute") - 60 ) * 60000);
+			}
+		} catch (Exception e) {
+			LOGGER.error("Connection error: ", e);
+		}finally {
+			this.connectionPool.releaseConnection(connection);
+		}
+		return 1L;
 	}
 	
 	private RealTimeChart getAvgDurationMetrics(String metric) {
@@ -69,23 +102,24 @@ public class MySqlMetricDAO {
 			connection = this.connectionPool.getConnection();
 			Statement statement = connection.createStatement();
 			ResultSet rs = statement.executeQuery("SELECT * FROM " + metric
-					 + ";");
+					+ ";");
 			while (rs.next()) {
 				String[] date = rs.getString("date").split("-");
-				Date d = new Date(Integer.valueOf(date[0]), Integer.valueOf(date[1]),
-						Integer.valueOf(date[2]));
-				builder.addValue(rs.getString("name"), d.getTime(), rs.getInt("hits"));
+				Date d = new Date(Integer.valueOf(date[0]),
+						Integer.valueOf(date[1]), Integer.valueOf(date[2]));
+				builder.addValue(rs.getString("name"), d.getTime(),
+						rs.getInt("hits"));
 			}
-			
+
 		} catch (Exception e) {
-			e.printStackTrace();
+			LOGGER.error("Connection error: ", e);
 		} finally {
 			this.connectionPool.releaseConnection(connection);
 		}
 		builder.setTitle(metric);
 		return builder.prepareChartWithLimit(10);
 	}
-	
+
 	private BarChart getBarChartChannels(String tableName) {
 		BarChart chart = new BarChart();
 		Connection connection = null;
@@ -93,13 +127,13 @@ public class MySqlMetricDAO {
 			connection = this.connectionPool.getConnection();
 			Statement statement = connection.createStatement();
 			ResultSet rs = statement.executeQuery("SELECT * FROM " + tableName
-					 + " order by hits desc;");
+					+ " order by hits desc;");
 			while (rs.next()) {
 				chart.addItem(rs.getString("name"), rs.getInt("hits"));
 			}
-			
+
 		} catch (Exception e) {
-			e.printStackTrace();
+			LOGGER.error("Connection error: ", e);
 		} finally {
 			this.connectionPool.releaseConnection(connection);
 		}
@@ -113,48 +147,47 @@ public class MySqlMetricDAO {
 			connection = this.connectionPool.getConnection();
 			Statement statement = connection.createStatement();
 			ResultSet rs = statement.executeQuery("SELECT * FROM " + tableName
-					 + ";");
+					+ ";");
 			while (rs.next()) {
 				chart.addItem(rs.getString("name"), rs.getInt("hits"));
 			}
-			
+
 		} catch (Exception e) {
-			e.printStackTrace();
+			LOGGER.error("Connection error: ", e);
 		}finally {
 			this.connectionPool.releaseConnection(connection);
 		}
 		return chart;
 	}
-	
+
 	public BarChart getTop10Channels() {
 		return getBarChartChannels("top10channels");
 	}
-	
+
 	public BarChart getTop10Categories() {
 		return getBarChartChannels("top10categories");
 	}
-	
+
 	public BarChart getWorstShows() {
 		return getBarChartChannels("worst_shows");
 	}
-	
+
 	public BarChart getTopChannelAds() {
 		return getBarChartChannels("ads_per_channel");
 	}
-	
+
 	public RealTimeChart getAvgDurationChannel() {
 		return getAvgDurationMetrics("avg_duration_channel");
 	}
-	
-	
+
 	public RealTimeChart getAvgDurationCategory() {
 		return getAvgDurationMetrics("avg_duration_category");
 	}
-	
+
 	public PieChart getAudiencePerType() {
 		return getPieChartChannels("audience_per_type");
 	}
-	
+
 	public PieChart getAudiencePerFamilyGroup() {
 		return getPieChartChannels("audience_per_fg");
 	}

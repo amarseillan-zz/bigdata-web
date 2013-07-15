@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import bigdata.service.MetricService;
@@ -19,9 +20,9 @@ public class MetricController {
 	private MetricService metricService;
 	
 	@RequestMapping(value = "/rt/{metric_type}", method = RequestMethod.GET)
-	protected @ResponseBody String getRTMetrics(@PathVariable String metric_type){
+	protected @ResponseBody String getRTMetrics(@PathVariable String metric_type, @RequestParam Long minute){
 		
-		return (new Gson()).toJson(this.metricService.getRealTimeMetrics(metric_type));
+		return (new Gson()).toJson(this.metricService.getRealTimeMetrics(metric_type, minute));
 	}
 	
 	@RequestMapping(value = "/batch/top10channels", method = RequestMethod.GET)
@@ -70,11 +71,6 @@ public class MetricController {
 	protected @ResponseBody String getWorstShows(){
 		
 		return (new Gson()).toJson(this.metricService.getWorstShows());
-	}
-	
-	@RequestMapping(value = "/utils/time")
-	protected @ResponseBody Long getTime(){
-		return this.metricService.getTime();
 	}
 	
 	public void setMetricService(MetricService metricService) {

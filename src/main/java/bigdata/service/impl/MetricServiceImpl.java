@@ -17,10 +17,11 @@ public class MetricServiceImpl implements MetricService {
 	private MySqlMetricDAO metricDAO;
 
 	@Override
-	public RealTimeChart getRealTimeMetrics(String metricID) {
+	public RealTimeChart getRealTimeMetrics(String metricID, Long minute) {
 		Assert.notNull(metricID);
+		
+		return metricDAO.getMetrics(metricID, minute);
 
-		return metricDAO.getMetrics(metricID);
 	}
 
 	@Override
@@ -61,11 +62,6 @@ public class MetricServiceImpl implements MetricService {
 	@Override
 	public PieChart getAudiencePerFamilyGroup() {
 		return metricDAO.getAudiencePerFamilyGroup();
-	}
-
-	@Override
-	public Long getTime() {
-		return metricDAO.getTime();
 	}
 
 }

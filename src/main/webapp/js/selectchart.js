@@ -41,7 +41,7 @@ var loadLineChart = function(path, metricName, minute) {
 				if (data.series.length === 0) {
 					onceTimer = setInterval(function() {
 						loadLineChart(path, metricName, minute);
-					}, 5000);
+					}, 60000);
 				} else {
 					fetchingData = false;
 					currentMinute = data.series[0].data[0][0];

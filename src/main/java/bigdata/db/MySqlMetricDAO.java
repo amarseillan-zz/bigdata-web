@@ -106,26 +106,6 @@ public class MySqlMetricDAO {
 		return chart;
 	}
 	
-	private BarChart getBarChartChannelsForAds(String tableName) {
-		BarChart chart = new BarChart();
-		Connection connection = null;
-		try {
-			connection = this.connectionPool.getConnection();
-			Statement statement = connection.createStatement();
-			ResultSet rs = statement.executeQuery("SELECT * FROM " + tableName
-					 + " order by hits desc;");
-			while (rs.next()) {
-				chart.addItem(rs.getString("channel_id"), rs.getInt("hits"));
-			}
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		}finally {
-			this.connectionPool.releaseConnection(connection);
-		}
-		return chart;
-	}
-	
 	private PieChart getPieChartChannels(String tableName) {
 		PieChart chart = new PieChart();
 		Connection connection = null;
@@ -159,7 +139,7 @@ public class MySqlMetricDAO {
 	}
 	
 	public BarChart getTopChannelAds() {
-		return getBarChartChannelsForAds("ads_per_channel");
+		return getBarChartChannels("ads_per_channel");
 	}
 	
 	public RealTimeChart getAvgDurationChannel() {

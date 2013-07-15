@@ -27,23 +27,23 @@ public class MySqlMetricDAO {
 
 	public RealTimeChart getMetrics(String metricID, Long minute) {
 		if (minute == -1) {
-			minute = this.getTime();
+			minute = this.getLastHour(metricID);
 		}
 		RealTimeChartBuilder builder = new RealTimeChartBuilder();
 		Connection connection = null;
 		try {
-			Long count = 1L;
+			//Long count = 1L;
 			connection = this.connectionPool.getConnection();
 			Statement statement = connection.createStatement();
-			ResultSet rs = statement.executeQuery("SELECT COUNT(DISTINCT metric_key) as count FROM " + metricID + ";");
-			if (rs.next()){
-				count = rs.getLong("count");
+			ResultSet rs; //= statement.executeQuery("SELECT COUNT(DISTINCT metric_key) as count FROM " + metricID + ";");
+			//if (rs.next()){
+				//count = rs.getLong("count");
 				//count = count > 10 ? 10 : count;
-			}
-			rs.close();
+			//}
+			//rs.close();
 			rs = statement.executeQuery("SELECT * FROM " + metricID	
 					+ " WHERE MINUTE >= " + minute / 60000
-					+ " ORDER BY MINUTE ASC LIMIT "+ count * 10 + ";");
+					+ " ORDER BY MINUTE ASC;");
 			while (rs.next()) {
 				builder.addValue(rs.getString("metric_key"),
 						rs.getLong("minute") * 60000, rs.getInt("quantity"));
@@ -59,13 +59,13 @@ public class MySqlMetricDAO {
 
 	}
 	
-	public Long getTime(){
+	public Long getTime(String metric){
 		Connection connection = null;
 		try {
 			connection = this.connectionPool.getConnection();
 			Statement statement = connection.createStatement();
 			ResultSet rs = statement
-					.executeQuery("SELECT MINUTE FROM TotalViewers ORDER BY MINUTE ASC");
+					.executeQuery("SELECT MIN(MINUTE) as minute FROM " + metric);
 			if (rs.next()) {
 				return Long.valueOf(rs.getLong("minute") * 60000);
 			}
@@ -77,6 +77,24 @@ public class MySqlMetricDAO {
 		return 1L;
 	}
 
+	public Long getLastHour(String metric){
+		Connection connection = null;
+		try {
+			connection = this.connectionPool.getConnection();
+			Statement statement = connection.createStatement();
+			ResultSet rs = statement
+					.executeQuery("SELECT MAX(MINUTE) as minute FROM " + metric);
+			if (rs.next()) {
+				return Long.valueOf((rs.getLong("minute") - 60 ) * 60000);
+			}
+		} catch (Exception e) {
+			LOGGER.error("Connection error: ", e);
+		}finally {
+			this.connectionPool.releaseConnection(connection);
+		}
+		return 1L;
+	}
+	
 	private RealTimeChart getAvgDurationMetrics(String metric) {
 		RealTimeChartBuilder builder = new RealTimeChartBuilder();
 		Connection connection = null;

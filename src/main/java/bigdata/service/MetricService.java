@@ -23,6 +23,4 @@ public interface MetricService {
 	PieChart getAudiencePerType();
 	
 	PieChart getAudiencePerFamilyGroup();
-	
-	Long getTime();
 }

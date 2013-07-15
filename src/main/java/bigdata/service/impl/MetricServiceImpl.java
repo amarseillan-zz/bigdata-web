@@ -64,9 +64,4 @@ public class MetricServiceImpl implements MetricService {
 		return metricDAO.getAudiencePerFamilyGroup();
 	}
 
-	@Override
-	public Long getTime() {
-		return metricDAO.getTime();
-	}
-
 }

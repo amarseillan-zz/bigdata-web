@@ -73,11 +73,6 @@ public class MetricController {
 		return (new Gson()).toJson(this.metricService.getWorstShows());
 	}
 	
-	@RequestMapping(value = "/utils/time")
-	protected @ResponseBody Long getTime(){
-		return this.metricService.getTime();
-	}
-	
 	public void setMetricService(MetricService metricService) {
 		this.metricService = metricService;
 	}

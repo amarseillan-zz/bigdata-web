@@ -1,12 +1,12 @@
-bigdata-web
+Bigdata @ ITBA (Buenos Aires Institute of Technology)
 ===========
 
 Bigdata visualization project
 
 Created by:
-	Martín Juan Sturla
-	Agustín Marseillan
-	María Victoria Mesa Alcorta
+	+ Martín Juan Sturla
+	+ Agustín Marseillan
+	+ María Victoria Mesa Alcorta
 
 To run:
 	While in eclipse, run Class src/test/java:bigdata.web.RunBigdata.java
